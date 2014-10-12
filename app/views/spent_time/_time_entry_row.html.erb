@@ -9,6 +9,11 @@
   <td class="issue-hours centered"><%= best_in_place_if entry.editable_by?(@user), entry, :hours, :path => update_entry_spent_time_path(:entry => entry) %></td>
   <td class="issue-hours centered"><%= h entry.issue ? entry.issue.estimated_hours : "0.00" %></td>
   <td class="issue-hours centered"><%= h entry.issue ? '%.2f' % entry.issue.total_spent_hours : "0.00" %></td>
+  <% if seek_cs_id(entry) %>
+      <td class="issue-cti-cs-id centered"><%= seek_cs_id(entry) %></td>
+  <% else %>
+      <td class="cti_cs_absent centered">--</td>
+  <% end %>
   <td class="centered">
   <% if entry.editable_by?(@user) %>
       <%= link_to(image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => entry},

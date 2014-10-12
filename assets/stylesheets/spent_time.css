@@ -10,6 +10,18 @@ td.hours {
     font-size: 0.9em;
 }
 
+td.cti_cs_absent {
+    background-color: red;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+td.issue-cti-cs-id {
+    text-align: center;
+    /*padding-right: 0.5em;*/
+    font-size: 0.9em;
+    font-weight: bold;
+}
 td.issue-hours {
     text-align: right;
     padding-right: 0.5em;
