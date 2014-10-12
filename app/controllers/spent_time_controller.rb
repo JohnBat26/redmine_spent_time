@@ -6,6 +6,7 @@ class SpentTimeController < ApplicationController
   include SpentTimeHelper
   helper :custom_fields
   include CustomFieldsHelper
+  include RedmineCtiPlugin::Utils if defined? (RedmineCtiPlugin::Utils)
 
   # Show the initial form.
   # * If user has permissions to see spent time for every project
@@ -65,7 +66,7 @@ class SpentTimeController < ApplicationController
   rescue ::ActionController::RedirectBackError
     redirect_to :action => 'index'
   end
-  
+
   # Update a time entry in line
   def update_entry
     @time_entry = TimeEntry.find(params[:entry])
@@ -74,20 +75,20 @@ class SpentTimeController < ApplicationController
 
     @time_entry.safe_attributes = params[:time_entry]
 
-    call_hook(:controller_timelog_edit_before_save, { :params => params, :time_entry => @time_entry })
+    call_hook(:controller_timelog_edit_before_save, {:params => params, :time_entry => @time_entry})
 
     if (@time_entry.save!)
       flash[:notice] = l("time_entry_updated_notice")
       respond_to do |format|
-        format.js 
+        format.js
         format.json { head :ok }
       end
     end
-    rescue Exception => ex
-      respond_to do |format|
-        flash[:error] = ex.message
-        format.js { render 'spent_time/update_entry_error'}
-      end
+  rescue Exception => ex
+    respond_to do |format|
+      flash[:error] = ex.message
+      format.js { render 'spent_time/update_entry_error' }
+    end
   end
 
   # Create a new time entry
@@ -110,6 +111,7 @@ class SpentTimeController < ApplicationController
     @time_entry = TimeEntry.new(:user => @user)
     @time_entry.attributes = params[:time_entry]
 
+
     begin
       @project = Project.find(params[:project_id])
 
@@ -117,7 +119,7 @@ class SpentTimeController < ApplicationController
         raise t('not_allowed_error', :project => @project)
       end
     rescue ActiveRecord::RecordNotFound
-      raise t('cannot_find_project_error', project_id=>params[:project_id])
+      raise t('cannot_find_project_error', project_id => params[:project_id])
     end
 
     @time_entry.project = @project
@@ -126,20 +128,28 @@ class SpentTimeController < ApplicationController
       begin
         @issue = Issue.find(issue_id)
       rescue ActiveRecord::RecordNotFound
-        raise t('issue_not_found_error', :issue_id=> issue_id)
+        raise t('issue_not_found_error', :issue_id => issue_id)
       end
 
       if @project.id==@issue.project_id
         @time_entry.issue = @issue
       else
-        raise t('issue_not_in_project_error', issue=>@issue, project=>@project)
+        raise t('issue_not_in_project_error', issue => @issue, project => @project)
       end
     end
+
+
 
     render_403 and return if @time_entry && !@time_entry.editable_by?(@user)
     @time_entry.user = @user
     if (@time_entry.save!)
-      flash[:notice] = l("time_entry_added_notice")
+      flash[:notice] = l(:time_entry_added_notice)
+      if defined? (RedmineCtiPlugin::Utils)
+        result = seek_ctics_id(issue: @time_entry.issue, time_entry: @time_entry)
+        unless result
+          flash.now[:error] = l(:ctics_id_not_found_warning, issue_id: @time_entry.issue.id)
+        end
+      end
       respond_to do |format|
         if @time_entry_date > @to
           @to = @time_entry_date
@@ -150,12 +160,16 @@ class SpentTimeController < ApplicationController
         format.js
       end
     end
-    rescue Exception => ex
-      respond_to do |format|
-        flash[:error] = ex.message
-        format.js { render 'spent_time/create_entry_error'}
-      end
+
+
+
+  rescue Exception => ex
+    respond_to do |format|
+      flash[:error] = ex.message
+      format.js { render 'spent_time/create_entry_error' }
+    end
   end
+
 
   # Update the project's issues when another project is selected
   def update_project_issues
@@ -170,9 +184,9 @@ class SpentTimeController < ApplicationController
   end
 
   private
-  
-  def is_numeric?(obj) 
-   obj.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+
+  def is_numeric?(obj)
+    obj.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 
   def allowed_project?(project_id)

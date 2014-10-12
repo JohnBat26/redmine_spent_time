@@ -1,5 +1,8 @@
 $("#flash_notice").remove()
 $("#flash_error").remove()
 $("#content").prepend("<div class='flash notice' id='flash_notice'><%=flash[:notice]%></div>")
+<% if flash[:error] %>
+$("#content").prepend("<div class='flash error' id='flash_error'><%=flash[:error]%></div>")
+<%  end %>
 $('#time_entries_report').html("<%= escape_javascript(render :partial => 'time_entries_report') %>")
-$("#flash_notice").fadeOut(3000)
+
