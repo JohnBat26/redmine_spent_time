@@ -24,3 +24,5 @@ en:
   project_is_mandatory_error: "You must select a project"
   label_total_estimated_time: "Total estimated time"
   cti_cs_id: "CTICS ID"
+  button_retry_to_cs: "Repeat send time entry in CTI CS"
+  time_entry_retry_to_cs_notice: "Re-time time entry sent (RM_ID: %{rm_id}, CTI_CS_ID: %{cti_cs_id}) to CTI CS"

@@ -24,3 +24,5 @@ ru:
   project_is_mandatory_error: "Вы должды выбрать проект"
   label_total_estimated_time: "Общее оценочное время"
   cti_cs_id: "CTICS ID"
+  button_retry_to_cs: "Повторить списание времени в CTI CS"
+  time_entry_retry_to_cs_notice: "Повторное списание времени (RM_ID: %{rm_id}, CTI_CS_ID: %{cti_cs_id}) отправлено в CTI CS"

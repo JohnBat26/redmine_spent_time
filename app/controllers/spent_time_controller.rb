@@ -49,6 +49,14 @@ class SpentTimeController < ApplicationController
     end
   end
 
+  def retry_to_cs
+    @time_entry = TimeEntry.find(params[:id])
+    cti_cs_id = call_hook(:model_time_entry_after_create, {issue: @time_entry.issue, time_entry: @time_entry })
+
+    flash[:notice] = l("time_entry_retry_to_cs_notice", rm_id: @time_entry.issue.id, cti_cs_id: cti_cs_id[0])
+    redirect_to :action => 'index'
+  end
+
   # Delete a time entry
   def destroy_entry
     @time_entry = TimeEntry.find(params[:id])
