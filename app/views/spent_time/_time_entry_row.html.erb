@@ -17,8 +17,8 @@
   <td class="centered">
   <% if entry.editable_by?(@user) %>
         <% if seek_cs_id(entry) %>
-          <%= link_to(image_tag('refresh.png',plugin: 'redmine_spent_time'),{ controller: 'spent_time', action: 'retry_to_cs', id: entry },
-                :title => l(:button_retry_to_cs)) %>
+          <%= link_to(image_tag('refresh.png',plugin: 'redmine_spent_time'), { controller: 'spent_time', action: 'retry_to_cs', id: entry },
+                :title => l(:button_retry_to_cs),data: {confirm: l(:confirm_retry_message)}) %>
        <% end %>
       <%= link_to(image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => entry},
                   :title => l(:button_edit)) %>

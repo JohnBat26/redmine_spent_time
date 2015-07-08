@@ -26,3 +26,4 @@ ru:
   cti_cs_id: "CTICS ID"
   button_retry_to_cs: "Повторить списание времени в CTI CS"
   time_entry_retry_to_cs_notice: "Повторное списание времени (RM_ID: %{rm_id}, CTI_CS_ID: %{cti_cs_id}) отправлено в CTI CS"
+  confirm_retry_message: "ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ ПОВТОРНО ОТПРАВИТЬ СПИСАНИЕ ВРЕМЕНИ В CTI CS ?"

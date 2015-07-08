@@ -26,3 +26,4 @@ en:
   cti_cs_id: "CTICS ID"
   button_retry_to_cs: "Repeat send time entry in CTI CS"
   time_entry_retry_to_cs_notice: "Re-time time entry sent (RM_ID: %{rm_id}, CTI_CS_ID: %{cti_cs_id}) to CTI CS"
+  confirm_retry_message: "YOU EXACTLY SURE YOU WANT RESEND TIME ENTRY TO CTI CS ?"
